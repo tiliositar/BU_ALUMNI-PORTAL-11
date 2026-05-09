@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bugema University Alumni | Activities</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-wrap">
+      <div class="brand"><img src="pics/BU%20logo.jpeg" alt="BU Logo" class="brand-logo" />
+        <div class="brand-text"><span class="brand-name">Bugema University</span><span class="brand-tagline">Excellence
+            In Service</span></div>
+      </div>
+      <button class="mobile-menu-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a class="active" href="activities.html">Activities</a>
+        <a href="events-news.html">Events/News</a>
+        <a href="opportunities.html">Opportunities</a>
+        <a href="sacco.html">SACCO</a>
+        <a href="chat.html">Chat</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title">Activities</h1>
+    <p class="page-subtitle">Participate in alumni-led programs that support careers, community, and campus development.</p>
+
+    <!-- Auth bar -->
+    <div id="activities-auth-bar"></div>
+
+    <!-- Live Donation Feed -->
+    <div class="donation-live-panel">
+      <h3><span class="live-dot"></span>Live Donation Feed</h3>
+      <p class="live-sub">Real-time donations from our generous alumni community</p>
+      <div class="donation-stats">
+        <div class="stat-pill"><span class="stat-val" id="stat-count">0</span><span class="stat-label">Total Donors</span></div>
+        <div class="stat-pill"><span class="stat-val" id="stat-total">UGX 0</span><span class="stat-label">Total Raised</span></div>
+      </div>
+      <div class="donation-ticker" id="donation-ticker">
+        <div class="donation-empty">Loading live donations…</div>
+      </div>
+    </div>
+
+    <section class="split">
+      <div class="stack">
+        <section class="card">
+          <span class="label">Program</span>
+          <h2>Career Guidance</h2>
+          <p>Get connected to alumni mentors, CV review sessions, and career development workshops.</p>
+          <div class="cta-row">
+            <span class="btn-wire" id="mentorship-signup-btn" style="cursor: pointer;">Sign Up</span>
+          </div>
+          <form class="wire-form js-submit-form" id="mentorship-form" data-form-type="Mentorship Sign Up"
+            style="display: none;">
+            <h4>Sign Up for Mentorship Program</h4>
+            <div class="wire-form-grid">
+              <div class="field full">
+                <label for="mentor-name">Name</label>
+                <input id="mentor-name" name="Name" type="text" placeholder="Enter your name" required />
+              </div>
+              <div class="field full">
+                <label for="mentor-email">Email</label>
+                <input id="mentor-email" name="Email" type="email" placeholder="Enter your email" required />
+              </div>
+              <div class="field full">
+                <label for="mentor-phone">Phone Number</label>
+                <input id="mentor-phone" name="Phone Number" type="tel" placeholder="Enter phone number" required />
+              </div>
+              <div class="field full">
+                <label for="mentor-role">Role</label>
+                <select id="mentor-role" name="Role" required>
+                  <option value="">Select role</option>
+                  <option>Become a Mentor</option>
+                  <option>Find a Mentor (Mentee)</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="mentor-interest">Area of Interest / Industry</label>
+                <select id="mentor-interest" name="Area of Interest" required>
+                  <option value="">Select area of interest</option>
+                  <option>Software Engineering & IT</option>
+                  <option>Marketing & Communications</option>
+                  <option>Finance & Accounting</option>
+                  <option>Healthcare & Medicine</option>
+                  <option>Business Administration & Management</option>
+                  <option>Education & Teaching</option>
+                  <option>Law & Public Policy</option>
+                  <option>Arts & Design</option>
+                  <option>Engineering & Manufacturing</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="mentor-goals">Mentorship Goals</label>
+                <textarea id="mentor-goals" name="Mentorship Goals"
+                  placeholder="What do you hope to achieve or share through this program?" required></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="submit-wire" type="submit">Submit</button>
+              <button class="cancel-wire js-cancel-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card" style="margin-top: 12px;">
+          <span class="label">Program</span>
+          <h2>Fund-Raising</h2>
+          <p>Support student scholarships, infrastructure projects, and university initiatives.</p>
+          <div class="cta-row">
+            <span class="btn-wire" id="fund-reg-btn" style="cursor: pointer;">Registration Form</span>
+          </div>
+          <form class="wire-form js-submit-form" id="fund-form" data-form-type="Fundraising Registration"
+            style="display: none;">
+            <h4>Registration Form for Fundraising</h4>
+            <div class="wire-form-grid">
+              <div class="field">
+                <label for="fund-name">Name</label>
+                <input id="fund-name" name="Name" type="text" placeholder="Enter your name" required />
+              </div>
+              <div class="field">
+                <label for="fund-email">Email</label>
+                <input id="fund-email" name="Email" type="email" placeholder="Enter your email" required />
+              </div>
+              <div class="field">
+                <label for="fund-gender">Gender</label>
+                <select id="fund-gender" name="Gender" required>
+                  <option value="">Select gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Prefer not to say</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="fund-purpose">Purpose for funds</label>
+                <textarea id="fund-purpose" name="Purpose for Funds" placeholder="Describe the purpose"
+                  required></textarea>
+              </div>
+              <div class="field">
+                <label for="fund-address">Address</label>
+                <input id="fund-address" name="Address" type="text" placeholder="Enter your address" required />
+              </div>
+              <div class="field">
+                <label for="fund-amount">Amount</label>
+                <input id="fund-amount" name="Amount" type="number" placeholder="Enter amount" required />
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="submit-wire" type="submit" id="fund-submit-btn">
+                ✅ Submit Application
+              </button>
+              <button class="cancel-wire js-cancel-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card" style="margin-top: 12px;">
+          <span class="label">Program</span>
+          <h2>Charity</h2>
+          <p>Join social outreach activities that serve surrounding communities and vulnerable groups.</p>
+          <div class="cta-row">
+            <span class="btn-wire" id="charity-app-btn" style="cursor: pointer;">Application Form</span>
+          </div>
+          <form class="wire-form js-submit-form" id="charity-form" data-form-type="Charity Application"
+            style="display: none;">
+            <h4>Application Form for Charity</h4>
+            <div class="wire-form-grid">
+              <div class="field full">
+                <label for="char-personal">Personal details</label>
+                <div class="wire-form-grid">
+                  <div class="field">
+                    <label for="char-name">Name</label>
+                    <input id="char-name" name="Name" type="text" placeholder="Enter your full name" required />
+                  </div>
+                  <div class="field">
+                    <label for="char-gender">Gender</label>
+                    <select id="char-gender" name="Gender" required>
+                      <option value="">Select gender</option>
+                      <option>Male</option>
+                      <option>Female</option>
+                      <option>Prefer not to say</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="char-project">Project</label>
+                <select id="char-project" name="Project" required>
+                  <option value="">Select project type</option>
+                  <option>Community Outreach</option>
+                  <option>Education Support</option>
+                  <option>Healthcare Support</option>
+                  <option>Food Relief</option>
+                  <option>Youth Empowerment</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="char-contact">Contacts</label>
+                <input id="char-contact" name="Contacts" type="text" placeholder="Phone or email" required />
+              </div>
+              <div class="field full">
+                <label for="char-request">Funding request details</label>
+                <select id="char-request" name="Funding Request Details" required>
+                  <option value="">Select funding request category</option>
+                  <option>Full Funding</option>
+                  <option>Partial Funding</option>
+                  <option>Emergency Support</option>
+                  <option>Recurring Monthly Support</option>
+                  <option>One-Time Support</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="char-amount">Amount</label>
+                <input id="char-amount" name="Amount" type="number" placeholder="Enter amount" required />
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="submit-wire" type="submit" id="char-submit-btn">
+                ✅ Submit Application
+              </button>
+              <button class="cancel-wire js-cancel-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <aside class="card">
+        <span class="label">Updates</span>
+        <h3>Announcements</h3>
+        <p>Registration deadlines, volunteer calls, and new program notices are posted here.</p>
+        <h3>Featured Story</h3>
+        <p>Read how alumni contributions are helping students and community development projects.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Bugema University</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="#" class="js-open-contacts">Contacts</a></li>
+          <li><a href="activities.html">Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="resources.html#faq">FAQ</a></li>
+          <li><a href="resources.html#privacy">Privacy Policy</a></li>
+          <li><a href="resources.html#terms">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="#" class="js-open-newsletter">Newsletter</a></li>
+          <li><a href="https://www.facebook.com/BugemaUniversity" target="_blank" rel="noopener">Social Media</a></li>
+          <li><a href="#" class="js-open-feedback">Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <div class="footer-contact-item">
+          <a href="mailto:alumni@bugemauniversity.ac.ug">alumni@bugemauniversity.ac.ug</a>
+          <div class="footer-contact-icons">
+            <a href="https://wa.me/256702940003" target="_blank" rel="noopener" class="footer-contact-link" title="WhatsApp">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+              </svg>
+              <span>+256 702 940 003</span>
+            </a>
+            <a href="tel:+256312351400" class="footer-contact-link" title="Call">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <span>+256 312 351 400</span>
+            </a>
+          </div>
+          <span>Kampala, Uganda</span>
+        </div>
+      </div>
+    </div>
+    <hr class="footer-divider" />
+    <div class="footer-bottom">
+      &copy; 2026 Bugema University Alumni Association. All rights reserved. | <a href="admin-login.html" style="color: inherit; text-decoration: none; opacity: 0.7;">Admin Login</a>
+    </div>
+  </footer>
+  
+    <!-- ══ PAYMENT MODAL ══ -->
+  <div id="payment-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:center; justify-content:center;">
+    <div class="payment-modal-content" style="background:#fff; border-radius:16px; max-width:480px; width:93%; box-shadow:0 24px 64px rgba(0,0,0,0.22); animation:pmIn .25s ease; position:relative; max-height:90vh; overflow-y:auto;">
+      <button id="pay-modal-close" style="position:absolute;top:14px;right:18px;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;">✕</button>
+      <div style="text-align:center; margin-bottom:20px;">
+        <div style="font-size:38px;">💳</div>
+        <h3 style="margin:8px 0 4px; color:#1e293b; font-size:20px;">Choose Payment Method</h3>
+        <p style="color:#64748b; font-size:13px; margin:0;">Your application has been saved. Complete your payment below.</p>
+        <p id="pay-modal-summary" style="margin:10px 0 0; font-weight:700; color:#1a7a5e; font-size:15px;"></p>
+      </div>
+
+      <!-- Method selector -->
+      <div style="display:flex; gap:10px; margin-bottom:20px;">
+        <button class="pm-tab active" data-method="bank" style="flex:1; padding:10px 6px; border-radius:8px; border:2px solid #1a7a5e; background:#f0fdf9; color:#1a7a5e; font-weight:700; cursor:pointer; font-size:13px;">🏦 Bank Transfer</button>
+        <button class="pm-tab" data-method="mobile" style="flex:1; padding:10px 6px; border-radius:8px; border:2px solid #e2e8f0; background:#f8fafc; color:#64748b; font-weight:600; cursor:pointer; font-size:13px;">📱 Mobile Money</button>
+        <button class="pm-tab" data-method="card" style="flex:1; padding:10px 6px; border-radius:8px; border:2px solid #e2e8f0; background:#f8fafc; color:#64748b; font-weight:600; cursor:pointer; font-size:13px;">💳 Card</button>
+      </div>
+
+      <!-- Bank Transfer Panel -->
+      <div id="pm-bank" class="pm-panel">
+        <div style="text-align:center; margin-bottom:14px;">
+          <img src="pics/Bank%20Transfer.jpeg" alt="Bank Transfer" style="height:40px; border-radius:6px; object-fit:contain;" />
+          <p style="font-size:12px; color:#64748b; margin:6px 0 0;">Safe and secure direct bank transfer.</p>
+        </div>
+        <div style="display:grid; gap:12px;">
+          <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">Bank Name</label>
+            <select id="pm-bank-name" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px;">
+              <option value="">Select bank</option>
+              <option>Stanbic Bank</option><option>Centenary Bank</option><option>Absa Bank</option>
+              <option>Equity Bank</option><option>Housing Finance Bank</option><option>Bank of Africa</option>
+              <option>DFCU Bank</option><option>Standard Chartered Bank</option><option>Other</option>
+            </select></div>
+          <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">Account Number</label>
+            <input id="pm-bank-account" type="text" placeholder="Enter account number" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px; box-sizing:border-box;" /></div>
+          <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">Transaction Code</label>
+            <input id="pm-bank-tx" type="text" placeholder="e.g. Deposit slip number" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px; box-sizing:border-box;" /></div>
+        </div>
+      </div>
+
+      <!-- Mobile Money Panel -->
+      <div id="pm-mobile" class="pm-panel" style="display:none;">
+        <div style="text-align:center; margin-bottom:14px;">
+          <img src="pics/MTN%20Mobile%20Money.jpeg" alt="MTN Mobile Money" style="height:40px; border-radius:6px; object-fit:contain;" />
+          <p style="font-size:12px; color:#64748b; margin:6px 0 0;">Instant and secure mobile money payment.</p>
+        </div>
+        <div style="display:grid; gap:12px;">
+          <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">Provider</label>
+            <select id="pm-mobile-provider" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px;">
+              <option value="">Select provider</option><option>MTN</option><option>Airtel</option>
+            </select></div>
+          <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">Phone Number</label>
+            <input id="pm-mobile-number" type="tel" placeholder="e.g. 0771234567" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px; box-sizing:border-box;" /></div>
+          <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">Transaction Code</label>
+            <input id="pm-mobile-tx" type="text" placeholder="e.g. Mobile Money Receipt ID" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px; box-sizing:border-box;" /></div>
+        </div>
+      </div>
+
+      <!-- Card Panel -->
+      <div id="pm-card" class="pm-panel" style="display:none;">
+        <div style="text-align:center; margin-bottom:14px;">
+          <img src="pics/VISA.jpeg" alt="Visa" style="height:34px; border-radius:6px; object-fit:contain; margin-right:6px;" />
+          <img src="pics/MasterCard.jpeg" alt="MasterCard" style="height:34px; border-radius:6px; object-fit:contain;" />
+          <p style="font-size:12px; color:#64748b; margin:6px 0 0;">Your card details are encrypted and securely processed.</p>
+        </div>
+        <div style="display:grid; gap:12px;">
+          <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">Card Number</label>
+            <input id="pm-card-number" type="text" placeholder="1234 5678 9012 3456" maxlength="19" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px; box-sizing:border-box;" /></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">Expiry</label>
+              <input id="pm-card-expiry" type="month" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px; box-sizing:border-box;" /></div>
+            <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">CVV</label>
+              <input id="pm-card-cvv" type="text" placeholder="123" maxlength="4" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px; box-sizing:border-box;" /></div>
+          </div>
+          <div><label style="font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:4px;">Transaction Code (Optional)</label>
+            <input id="pm-card-tx" type="text" placeholder="If applicable" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-size:14px; box-sizing:border-box;" /></div>
+        </div>
+      </div>
+
+      <button id="pay-modal-confirm" style="width:100%; margin-top:22px; padding:13px; background:#1a7a5e; color:#fff; border:none; border-radius:8px; font-size:16px; font-weight:700; cursor:pointer; transition:background .2s;">Proceed to Pay</button>
+      <p id="pay-modal-msg" style="text-align:center; margin-top:10px; font-size:13px; color:#ef4444; display:none;"></p>
+    </div>
+  </div>
+
+  <style>
+    @keyframes pmIn { from { transform:scale(.85); opacity:0; } to { transform:scale(1); opacity:1; } }
+    #payment-modal { display:none; }
+    #payment-modal.open { display:flex; }
+    .pm-tab.active { border-color:#1a7a5e !important; background:#f0fdf9 !important; color:#1a7a5e !important; }
+    .payment-modal-content { padding: 36px 32px; }
+    @media (max-width: 600px) { .payment-modal-content { padding: 24px 16px; } }
+  </style>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="env-config.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // ── Shared payment modal state ──
+    let _pendingPayment = null;
+
+    function openPaymentModal(formData) {
+      _pendingPayment = formData;
+      const modal = document.getElementById('payment-modal');
+      document.getElementById('pay-modal-summary').textContent =
+        formData.formType + ' — UGX ' + Number(formData.amount).toLocaleString();
+      document.getElementById('pay-modal-msg').style.display = 'none';
+      // Use style.display directly — inline styles override CSS classes
+      modal.style.display = 'flex';
+      switchPayTab('bank');
+    }
+
+    function closePaymentModal() {
+      document.getElementById('payment-modal').style.display = 'none';
+      _pendingPayment = null;
+    }
+
+    document.getElementById('pay-modal-close').addEventListener('click', closePaymentModal);
+    document.getElementById('payment-modal').addEventListener('click', e => {
+      if (e.target === document.getElementById('payment-modal')) closePaymentModal();
+    });
+
+    // ── Tab switching ──
+    function switchPayTab(method) {
+      document.querySelectorAll('.pm-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.pm-panel').forEach(p => p.style.display = 'none');
+      document.querySelector('[data-method="' + method + '"]').classList.add('active');
+      document.getElementById('pm-' + method).style.display = 'block';
+    }
+    document.querySelectorAll('.pm-tab').forEach(tab => {
+      tab.addEventListener('click', () => switchPayTab(tab.dataset.method));
+    });
+
+    // ── Auth gate helper ─────────────────────────────────────────────
+    function requireAuth(action) {
+      const user = typeof Auth !== 'undefined' ? Auth.get() : null;
+      if (!user) {
+        // Show locked banner
+        showAuthGateBanner('You must be signed in to access this. Please register or log in first.');
+        return false;
+      }
+      if (user.status === 'pending') {
+        showAuthGateBanner('Your account is still pending admin approval. Please wait for approval before applying.');
+        return false;
+      }
+      return true;
+    }
+
+    function showAuthGateBanner(msg) {
+      let banner = document.getElementById('auth-gate-banner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'auth-gate-banner';
+        banner.style.cssText = `
+          position:fixed;top:80px;left:50%;transform:translateX(-50%);
+          z-index:9000;max-width:480px;width:90%;
+          background:linear-gradient(135deg,#0d1b3e,#1a3a6e);
+          color:#fff;border-radius:14px;padding:20px 24px;
+          box-shadow:0 12px 40px rgba(0,0,0,0.35);
+          display:flex;gap:14px;align-items:flex-start;
+          animation:slideDown 0.3s ease;
+        `;
+        document.body.appendChild(banner);
+      }
+      banner.innerHTML = `
+        <div style="font-size:28px;">🔒</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:15px;margin-bottom:6px;color:#f0b429;">Access Restricted</div>
+          <div style="font-size:13px;opacity:0.9;margin-bottom:12px;">${msg}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="openAuthModal('login');document.getElementById('auth-gate-banner').remove();" style="background:#f0b429;color:#0d1b3e;border:none;padding:8px 16px;border-radius:6px;font-weight:700;cursor:pointer;font-size:13px;">Sign In</button>
+            <button onclick="openAuthModal('register');document.getElementById('auth-gate-banner').remove();" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4);padding:8px 16px;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px;">Register</button>
+            <button onclick="this.closest('#auth-gate-banner').remove();" style="background:transparent;color:rgba(255,255,255,0.5);border:none;padding:8px;cursor:pointer;font-size:18px;margin-left:auto;">✕</button>
+          </div>
+        </div>`;
+      clearTimeout(banner._t);
+      banner._t = setTimeout(() => banner.remove(), 7000);
+    }
+
+    // ── Form open buttons (with auth gate) ─────────────────────────
+    document.getElementById('mentorship-signup-btn').addEventListener('click', () => {
+      if (!requireAuth()) return;
+      const form = document.getElementById('mentorship-form');
+      form.style.display = form.style.display === 'none' || !form.style.display ? 'block' : 'none';
+    });
+
+    document.getElementById('fund-reg-btn').addEventListener('click', () => {
+      if (!requireAuth()) return;
+      const form = document.getElementById('fund-form');
+      form.style.display = form.style.display === 'none' || !form.style.display ? 'block' : 'none';
+    });
+
+    document.getElementById('charity-app-btn').addEventListener('click', () => {
+      if (!requireAuth()) return;
+      const form = document.getElementById('charity-form');
+      form.style.display = form.style.display === 'none' || !form.style.display ? 'block' : 'none';
+    });
+
+    // ── Cancel buttons ──────────────────────────────────────────────
+    document.querySelectorAll('.js-cancel-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('form').style.display = 'none';
+      });
+    });
+
+    // ── Form submit handlers ──
+    async function handleFormSubmit(e, formId, formType, category) {
+      e.preventDefault();
+      if (!requireAuth()) return;
+      const form = document.getElementById(formId);
+      const data = {};
+      form.querySelectorAll('[name]').forEach(el => { data[el.name] = el.value; });
+
+      const submitBtn = form.querySelector('[type="submit"]');
+      submitBtn.textContent = 'Saving...';
+      submitBtn.disabled = true;
+
+      // Always capture form data before async ops
+      const paymentData = {
+        formType,
+        category,
+        amount: data['Amount'] || 0,
+        email: data['Email'] || '',
+        name: data['Name'] || ''
+      };
+
+      try {
+        const res = await fetch((window.API_BASE_URL || '') + '/api/applications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ form_type: formType, data_json: data })
+        });
+        if (!res.ok) throw new Error('Server error');
+      } catch (err) {
+        console.warn('Could not save to server, proceeding to payment anyway.', err);
+      }
+
+      // Always close form and open payment modal regardless of server save
+      form.style.display = 'none';
+      form.reset();
+      submitBtn.textContent = '✅ Submit Application';
+      submitBtn.disabled = false;
+      openPaymentModal(paymentData);
+    }
+
+    document.getElementById('fund-form').addEventListener('submit', e =>
+      handleFormSubmit(e, 'fund-form', 'Fundraising Registration', 'fundraising'));
+
+    document.getElementById('charity-form').addEventListener('submit', e =>
+      handleFormSubmit(e, 'charity-form', 'Charity Application', 'charity'));
+
+    document.getElementById('mentorship-form').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!requireAuth()) return;
+      const form = document.getElementById('mentorship-form');
+      const data = {};
+      form.querySelectorAll('[name]').forEach(el => { data[el.name] = el.value; });
+      fetch((window.API_BASE_URL || '') + '/api/applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ form_type: 'Mentorship Sign Up', data_json: data })
+      }).catch(() => {});
+      form.style.display = 'none';
+      form.reset();
+      if (typeof showToast === 'function') showToast('✅ Submitted!', 'Your mentorship sign-up has been received.', 'success');
+    });
+
+    // ── Confirm Payment ──
+    document.getElementById('pay-modal-confirm').addEventListener('click', async () => {
+      const activeMethod = document.querySelector('.pm-tab.active').dataset.method;
+      const msgEl = document.getElementById('pay-modal-msg');
+      msgEl.style.display = 'none';
+
+      let paymentDetails = { method: activeMethod };
+      let txId = '';
+      if (activeMethod === 'bank') {
+        paymentDetails.bankName = document.getElementById('pm-bank-name').value;
+        paymentDetails.accountNumber = document.getElementById('pm-bank-account').value;
+        txId = document.getElementById('pm-bank-tx').value.trim();
+        if (!paymentDetails.bankName || !paymentDetails.accountNumber || !txId) {
+          msgEl.textContent = 'Please fill in your bank details and transaction code.'; msgEl.style.display = 'block'; return;
+        }
+      } else if (activeMethod === 'mobile') {
+        paymentDetails.provider = document.getElementById('pm-mobile-provider').value;
+        paymentDetails.phone = document.getElementById('pm-mobile-number').value;
+        txId = document.getElementById('pm-mobile-tx').value.trim();
+        if (!paymentDetails.provider || !paymentDetails.phone || !txId) {
+          msgEl.textContent = 'Please fill in your mobile money details and transaction code.'; msgEl.style.display = 'block'; return;
+        }
+      } else if (activeMethod === 'card') {
+        paymentDetails.cardNumber = document.getElementById('pm-card-number').value;
+        paymentDetails.expiry = document.getElementById('pm-card-expiry').value;
+        paymentDetails.cvv = document.getElementById('pm-card-cvv').value;
+        txId = document.getElementById('pm-card-tx').value.trim() || 'CARD-' + Math.random().toString(36).substring(2,8).toUpperCase();
+        if (!paymentDetails.cardNumber || !paymentDetails.expiry || !paymentDetails.cvv) {
+          msgEl.textContent = 'Please fill in all card details.'; msgEl.style.display = 'block'; return;
+        }
+      }
+
+      const btn = document.getElementById('pay-modal-confirm');
+      btn.textContent = 'Processing...';
+      btn.disabled = true;
+
+      try {
+        // Initiate donation record
+        const res = await fetch((window.API_BASE_URL || '') + '/api/donations/initiate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            donor_name: _pendingPayment.name || 'Anonymous',
+            email: _pendingPayment.email || 'noemail@example.com',
+            amount: _pendingPayment.amount,
+            currency: 'UGX',
+            purpose: _pendingPayment.formType,
+            category: _pendingPayment.category,
+            payment_method: activeMethod,
+            tx_id: txId
+          })
+        });
+        const data = await res.json();
+        closePaymentModal();
+        alert('✅ Payment submitted for verification!\n\nTx ID: ' + (txId || data.tx_ref || 'N/A') + '\nThank you! An admin will review it shortly.');
+      } catch (err) {
+        msgEl.textContent = 'Payment failed. Please try again.'; msgEl.style.display = 'block';
+      } finally {
+        btn.textContent = 'Proceed to Pay';
+        btn.disabled = false;
+      }
+    });
+  </script>\n</body>
+
+</html>

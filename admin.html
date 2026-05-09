@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bugema University Alumni | Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .admin-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .metric-card h3 {
+      margin: 0 0 8px 0;
+      color: var(--muted);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .metric-card .val {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--brand);
+    }
+    
+    .admin-section {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+    .admin-section h2 {
+      margin-top: 0;
+      color: var(--ink);
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+    .admin-table th, .admin-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+    .admin-table th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .admin-table tbody tr:hover {
+      background: #f1f5f9;
+    }
+    .admin-table td {
+      color: var(--ink);
+      font-size: 14px;
+    }
+    
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #ecfdf7;
+      color: #059669;
+    }
+    .tag.warning { background: #fef3c7; color: #d97706; }
+    .tag.info { background: #eff6ff; color: #2563eb; }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-wrap">
+      <div class="brand">
+        <img src="pics/BU%20logo.jpeg" alt="BU Logo" class="brand-logo" />
+        <div class="brand-text">
+          <span class="brand-name">Bugema University</span>
+          <span class="brand-tagline">Admin Dashboard</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Back to Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title">Dashboard Overview</h1>
+    <p class="page-subtitle">View and manage alumni submissions, feedback, and donations.</p>
+
+    <div id="loading" class="loading">Loading dashboard data...</div>
+    
+    <div id="dashboard-content" style="display: none;">
+      <!-- Metrics -->
+      <div class="admin-metrics">
+        <div class="metric-card">
+          <h3>Total Donations</h3>
+          <div class="val" id="metric-donations">UGX 0</div>
+        </div>
+        <div class="metric-card">
+          <h3>Registered Users</h3>
+          <div class="val" id="metric-users">0</div>
+        </div>
+        <div class="metric-card">
+          <h3>&#x23F3; Pending Approvals</h3>
+          <div class="val" id="metric-pending" style="color:#d97706">0</div>
+        </div>
+        <div class="metric-card">
+          <h3>SACCO Fund</h3>
+          <div class="val" id="metric-sacco" style="color:#0f766e">UGX 0</div>
+        </div>
+        <div class="metric-card">
+          <h3>&#x1F4B8; Total Withdrawn</h3>
+          <div class="val" id="metric-withdrawn" style="color:#dc2626">UGX 0</div>
+        </div>
+        <div class="metric-card" style="border:2px solid #0f766e;background:linear-gradient(135deg,#f0fdf9,#ffffff);">
+          <h3 style="color:#0f766e;">&#x1F4B0; Net Balance</h3>
+          <div class="val" id="metric-net-balance" style="color:#0f766e;font-size:20px;">UGX 0</div>
+        </div>
+        <div class="metric-card">
+          <h3>Feedback Entries</h3>
+          <div class="val" id="metric-feedback">0</div>
+        </div>
+        <div class="metric-card">
+          <h3>Total Applications</h3>
+          <div class="val" id="metric-applications">0</div>
+        </div>
+      </div>
+
+      <!-- Registered Users Table -->
+      <section class="admin-section">
+        <h2>Registered Users</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date Registered</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role / Tier</th>
+              <th>Payment TX ID</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-users"></tbody>
+        </table>
+      </section>
+
+      <!-- SACCO Pending Contributions -->
+      <section class="admin-section">
+        <h2>SACCO Contributions &mdash; Pending Verification</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Member</th>
+              <th>Tier</th>
+              <th>Amount</th>
+              <th>TX ID</th>
+              <th>Note</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-sacco-pending"></tbody>
+        </table>
+      </section>
+
+      <!-- SACCO Verified Contributions -->
+      <section class="admin-section">
+        <h2 style="color:#0f766e;">✅ SACCO Contributions &mdash; Verified Members</h2>
+        <p style="color:var(--muted);font-size:13px;margin:-8px 0 14px;">All approved SACCO contributions. Total fund displayed in the metrics above.</p>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date Verified</th>
+                <th>Member</th>
+                <th>Tier</th>
+                <th>Amount (UGX)</th>
+                <th>TX ID</th>
+                <th>Note</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="table-sacco-verified"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Feedback Table -->
+      <section class="admin-section">
+        <h2>Recent Feedback</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Rating</th>
+              <th>Label</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody id="table-feedback"></tbody>
+        </table>
+      </section>
+
+      <!-- Applications Table -->
+      <section class="admin-section">
+        <h2>Submitted Applications</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Form Type</th>
+              <th>Applicant Name / Email</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody id="table-applications"></tbody>
+        </table>
+      </section>
+
+      <!-- Pending Donations Table -->
+      <section class="admin-section">
+        <h2>Pending Donations</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Donor Name</th>
+              <th>Amount</th>
+              <th>Purpose</th>
+              <th>TX ID</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-donations-pending"></tbody>
+        </table>
+      </section>
+
+      <!-- Verified Donations Table -->
+      <section class="admin-section">
+        <h2>Verified Donations</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Donor Name</th>
+              <th>Amount</th>
+              <th>Purpose</th>
+              <th>TX ID</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-donations-verified"></tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      &copy; 2026 Bugema University Alumni Association. All rights reserved. | <a href="admin-login.html" style="color: inherit; text-decoration: none; opacity: 0.7;">Admin Login</a>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Client-side security check
+      let user = null;
+      try { user = JSON.parse(localStorage.getItem('buUser')); } catch(e) {}
+      
+      if (!user || user.role !== 'admin') {
+        alert('Unauthorized access. Redirecting to home.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // 2. Fetch data with authorization header
+      fetch((window.API_BASE_URL || '') + '/api/admin/data', {
+        headers: {
+          'user-id': user.id
+        }
+      })
+        .then(r => {
+          if (!r.ok) {
+            if (r.status === 401 || r.status === 403) {
+              alert('Session expired or unauthorized. Redirecting to home.');
+              localStorage.removeItem('buUser');
+              window.location.href = 'index.html';
+            }
+            throw new Error('Failed to fetch');
+          }
+          return r.json();
+        })
+        .then(data => {
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('dashboard-content').style.display = 'block';
+
+          // Populate metrics
+          document.getElementById('metric-donations').textContent = 'UGX ' + data.stats.donationsTotal.toLocaleString();
+          document.getElementById('metric-users').textContent = data.stats.usersCount;
+          document.getElementById('metric-pending').textContent = data.stats.pendingApprovals;
+          document.getElementById('metric-sacco').textContent = 'UGX ' + (data.stats.saccoTotal||0).toLocaleString();
+          // Populate Metrics (extra ones)
+          document.getElementById('metric-withdrawn').textContent = 'UGX ' + (data.stats.withdrawalsTotal||0).toLocaleString();
+          document.getElementById('metric-net-balance').textContent = 'UGX ' + (data.stats.netBalance||0).toLocaleString();
+
+          // Show balance in withdraw form
+          const balDisplay = document.getElementById('wd-balance-display');
+          if (balDisplay) balDisplay.textContent = 'Available balance: UGX ' + (data.stats.netBalance||0).toLocaleString();
+
+          // Populate Withdrawals Table
+          const wdBody = document.getElementById('table-withdrawals');
+          if (wdBody) {
+            if (!data.withdrawals || data.withdrawals.length === 0) {
+              wdBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px;">No withdrawals recorded yet.</td></tr>';
+            } else {
+              let wdTotal = 0;
+              data.withdrawals.forEach(w => {
+                wdTotal += Number(w.amount);
+                const tr = document.createElement('tr');
+                tr.id = 'wd-row-' + w.id;
+                tr.innerHTML = `
+                  <td style="color:var(--muted);font-size:12px;">${new Date(w.created_at).toLocaleString()}</td>
+                  <td><strong style="color:#dc2626;">UGX ${Number(w.amount).toLocaleString()}</strong></td>
+                  <td>${w.reason}</td>
+                  <td>${w.method}</td>
+                  <td><code style="font-size:11px;">${w.account_ref}</code></td>
+                  <td style="font-size:12px;color:var(--muted);">${w.withdrawn_by}</td>
+                  <td><button class="admin-btn admin-btn-reject" onclick="deleteWithdrawal(${w.id})">&#x1F5D1; Delete</button></td>
+                `;
+                wdBody.appendChild(tr);
+              });
+              // Totals row
+              const tr = document.createElement('tr');
+              tr.style.cssText = 'background:#fff5f5;font-weight:700;';
+              tr.innerHTML = `<td colspan="1" style="text-align:right;color:#dc2626;padding:12px;">TOTAL WITHDRAWN</td><td style="color:#dc2626;font-size:16px;">UGX ${wdTotal.toLocaleString()}</td><td colspan="5"></td>`;
+              wdBody.appendChild(tr);
+            }
+          }
+
+          document.getElementById('metric-feedback').textContent = data.stats.feedbackCount;
+          document.getElementById('metric-applications').textContent = data.stats.applicationsCount;
+
+          // Populate Users
+          const usersBody = document.getElementById('table-users');
+          if (!data.users || data.users.length === 0) {
+            usersBody.innerHTML = '<tr><td colspan="7" style="text-align:center">No users registered yet</td></tr>';
+          } else {
+            data.users.forEach(u => {
+              const tr = document.createElement('tr');
+              tr.id = 'user-row-' + u.id;
+              let roleClass = 'info';
+              if (u.role === 'admin') roleClass = 'warning';
+              else if (u.role === 'alumni') roleClass = '';
+
+              const tierBadge = u.membership_tier ? `<span class="mem-badge mem-badge-${u.membership_tier.toLowerCase()}">${u.membership_tier}</span>` : '';
+              const statusClass = 'status-' + (u.status || 'approved');
+              const statusLabel = u.status || 'approved';
+
+              let actionBtns = '';
+              if (u.status === 'pending') {
+                actionBtns = `
+                  <button class="admin-btn admin-btn-approve" onclick="approveUser(${u.id})">✓ Approve</button>
+                  <button class="admin-btn admin-btn-deny"    onclick="denyUser(${u.id})">✗ Deny</button>
+                `;
+              } else if (u.status === 'approved') {
+                actionBtns = `<button class="admin-btn admin-btn-deny" onclick="denyUser(${u.id})">✗ Revoke</button>`;
+              } else {
+                actionBtns = `<button class="admin-btn admin-btn-approve" onclick="approveUser(${u.id})">✓ Reinstate</button>`;
+              }
+
+              tr.innerHTML = `
+                <td>${new Date(u.created_at).toLocaleString()}</td>
+                <td><strong>${u.name}</strong></td>
+                <td><span style="color:var(--muted)">${u.email}</span></td>
+                <td><span class="tag ${roleClass}">${u.role}</span>${tierBadge}</td>
+                <td><code style="font-size:11px;color:var(--muted)">${u.payment_tx_id || '—'}</code></td>
+                <td><span class="tag ${statusClass}">${statusLabel}</span></td>
+                <td>${actionBtns}</td>
+              `;
+              usersBody.appendChild(tr);
+            });
+          }
+
+          // Populate SACCO Pending
+          const saccoBody = document.getElementById('table-sacco-pending');
+          if (!data.saccoPending || data.saccoPending.length === 0) {
+            saccoBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px;">No pending SACCO contributions</td></tr>';
+          } else {
+            data.saccoPending.forEach(s => {
+              const tr = document.createElement('tr');
+              tr.id = 'sacco-row-' + s.id;
+              const tierBadge = s.membership_tier ? `<span class="mem-badge mem-badge-${s.membership_tier.toLowerCase()}">${s.membership_tier}</span>` : '—';
+              tr.innerHTML = `
+                <td>${new Date(s.created_at).toLocaleString()}</td>
+                <td><strong>${s.user_name}</strong></td>
+                <td>${tierBadge}</td>
+                <td><strong>UGX ${Number(s.amount).toLocaleString()}</strong></td>
+                <td><code style="font-size:11px;color:var(--muted)">${s.tx_id}</code></td>
+                <td>${s.note || '—'}</td>
+                <td>
+                  <button class="admin-btn admin-btn-verify" onclick="verifySacco(${s.id})">✓ Verify</button>
+                  <button class="admin-btn admin-btn-reject" onclick="rejectSacco(${s.id})">✗ Reject</button>
+                </td>
+              `;
+              saccoBody.appendChild(tr);
+            });
+          }
+
+          // Populate SACCO Verified
+          const saccoVerifiedBody = document.getElementById('table-sacco-verified');
+          if (!data.saccoVerified || data.saccoVerified.length === 0) {
+            saccoVerifiedBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px;">No verified contributions yet. Approve pending contributions above.</td></tr>';
+          } else {
+            let runningTotal = 0;
+            data.saccoVerified.forEach((s, idx) => {
+              runningTotal += Number(s.amount);
+              const tr = document.createElement('tr');
+              tr.id = 'sacco-verified-row-' + s.id;
+              const tierBadge = s.membership_tier
+                ? `<span class="mem-badge mem-badge-${s.membership_tier.toLowerCase()}">${s.membership_tier}</span>`
+                : '<span style="color:var(--muted)">—</span>';
+              const rowNum = idx + 1;
+              tr.innerHTML = `
+                <td style="color:var(--muted);font-size:12px;">${new Date(s.created_at).toLocaleString()}</td>
+                <td>
+                  <strong>${s.user_name}</strong>
+                  <span style="font-size:11px;color:var(--muted);margin-left:4px;">#${rowNum}</span>
+                </td>
+                <td>${tierBadge}</td>
+                <td>
+                  <strong style="color:#0f766e;">UGX ${Number(s.amount).toLocaleString()}</strong>
+                  <div style="font-size:11px;color:var(--muted);">Running: UGX ${runningTotal.toLocaleString()}</div>
+                </td>
+                <td><code style="font-size:11px;color:var(--muted)">${s.tx_id}</code></td>
+                <td style="font-size:13px;">${s.note || '<i style="color:var(--muted)">—</i>'}</td>
+                <td>
+                  <button class="admin-btn admin-btn-reject" onclick="revokeVerified(${s.id})" title="Revoke this verification">✗ Revoke</button>
+                </td>
+              `;
+              saccoVerifiedBody.appendChild(tr);
+            });
+
+            // Append totals footer row
+            const tfr = document.createElement('tr');
+            tfr.style.cssText = 'background:#f0fdf9;font-weight:700;';
+            tfr.innerHTML = `
+              <td colspan="3" style="text-align:right;color:#0f766e;padding:12px;">TOTAL VERIFIED FUND</td>
+              <td style="color:#0f766e;font-size:16px;">UGX ${runningTotal.toLocaleString()}</td>
+              <td colspan="3"></td>
+            `;
+            saccoVerifiedBody.appendChild(tfr);
+          }
+
+          // Populate Feedback
+          const fbBody = document.getElementById('table-feedback');
+          if (data.feedback.length === 0) {
+            fbBody.innerHTML = '<tr><td colspan="4" style="text-align:center">No feedback yet</td></tr>';
+          } else {
+            data.feedback.forEach(f => {
+              const tr = document.createElement('tr');
+              const stars = '★'.repeat(f.rating) + '☆'.repeat(5 - f.rating);
+              tr.innerHTML = `
+                <td>${new Date(f.created_at).toLocaleString()}</td>
+                <td style="color:#c9a227; font-size:16px;">${stars}</td>
+                <td><span class="tag ${f.rating >= 4 ? '' : (f.rating === 3 ? 'warning' : 'warning')}">${f.label}</span></td>
+                <td>${f.comment || '<i>No comment</i>'}</td>
+              `;
+              fbBody.appendChild(tr);
+            });
+          }
+
+          // Populate Applications
+          const appBody = document.getElementById('table-applications');
+          if (data.applications.length === 0) {
+            appBody.innerHTML = '<tr><td colspan="4" style="text-align:center">No applications yet</td></tr>';
+          } else {
+            data.applications.forEach(a => {
+              const tr = document.createElement('tr');
+              let parsed = {};
+              try { parsed = JSON.parse(a.data_json); } catch(e){}
+              
+              const name = parsed.Name || parsed.name || 'N/A';
+              const email = parsed.Email || parsed.email || parsed.Contact || parsed.contact || 'N/A';
+              
+              // format details string
+              let detailsStr = '';
+              for (const [key, value] of Object.entries(parsed)) {
+                if(key !== 'Name' && key !== 'name' && key !== 'Email' && key !== 'email') {
+                  detailsStr += `<strong>${key}:</strong> ${value}<br/>`;
+                }
+              }
+
+              tr.innerHTML = `
+                <td>${new Date(a.created_at).toLocaleString()}</td>
+                <td><span class="tag info">${a.form_type}</span></td>
+                <td><strong>${name}</strong><br/><span style="color:var(--muted)">${email}</span></td>
+                <td style="font-size:12px;">${detailsStr}</td>
+              `;
+              appBody.appendChild(tr);
+            });
+          }
+
+          // Populate Pending Donations
+          const pdBody = document.getElementById('table-donations-pending');
+          if (!data.pendingDonations || data.pendingDonations.length === 0) {
+            pdBody.innerHTML = '<tr><td colspan="6" style="text-align:center">No pending donations</td></tr>';
+          } else {
+            data.pendingDonations.forEach(d => {
+              const tr = document.createElement('tr');
+              tr.id = 'don-row-' + d.id;
+              tr.innerHTML = `
+                <td>${new Date(d.created_at).toLocaleString()}</td>
+                <td><strong>${d.donor_name}</strong></td>
+                <td>${d.currency} ${d.amount.toLocaleString()}</td>
+                <td>${d.purpose}</td>
+                <td><code style="font-size:11px;color:var(--muted)">${d.flw_ref || 'N/A'}</code></td>
+                <td>
+                  <button class="admin-btn admin-btn-verify" onclick="verifyDonation(${d.id})">✓ Verify</button>
+                  <button class="admin-btn admin-btn-reject" onclick="rejectDonation(${d.id})">✗ Reject</button>
+                </td>
+              `;
+              pdBody.appendChild(tr);
+            });
+          }
+
+          // Populate Verified Donations
+          const vdBody = document.getElementById('table-donations-verified');
+          if (!data.verifiedDonations || data.verifiedDonations.length === 0) {
+            vdBody.innerHTML = '<tr><td colspan="6" style="text-align:center">No verified donations yet</td></tr>';
+          } else {
+            data.verifiedDonations.forEach(d => {
+              const tr = document.createElement('tr');
+              tr.id = 'don-verified-row-' + d.id;
+              tr.innerHTML = `
+                <td>${new Date(d.created_at).toLocaleString()}</td>
+                <td><strong>${d.donor_name}</strong></td>
+                <td>${d.currency} ${d.amount.toLocaleString()}</td>
+                <td>${d.purpose}</td>
+                <td><code style="font-size:11px;color:var(--muted)">${d.flw_ref || 'N/A'}</code></td>
+                <td>
+                  <button class="admin-btn admin-btn-reject" onclick="revokeDonation(${d.id})">✗ Revoke</button>
+                </td>
+              `;
+              vdBody.appendChild(tr);
+            });
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById('loading').textContent = 'Error loading data. Make sure you are logged in or the server is running.';
+        });
+    });
+
+    const adminHeaders = () => ({ 'Content-Type': 'application/json', 'user-id': JSON.parse(localStorage.getItem('buUser')||'{}').id });
+
+    async function approveUser(id) {
+      const r = await fetch(`/api/admin/users/${id}/approve`, { method: 'POST', headers: adminHeaders() });
+      const d = await r.json();
+      if (r.ok) {
+        const row = document.getElementById('user-row-' + id);
+        if (row) {
+          const statusCell = row.cells[5];
+          const actionCell = row.cells[6];
+          statusCell.innerHTML = '<span class="tag status-approved">approved</span>';
+          actionCell.innerHTML = `<button class="admin-btn admin-btn-deny" onclick="denyUser(${id})">✗ Revoke</button>`;
+        }
+        document.getElementById('metric-pending').textContent = Math.max(0, parseInt(document.getElementById('metric-pending').textContent) - 1);
+        showAlert('✅ User approved successfully.');
+      } else { showAlert('Error: ' + d.error, true); }
+    }
+
+    async function denyUser(id) {
+      const r = await fetch(`/api/admin/users/${id}/deny`, { method: 'POST', headers: adminHeaders() });
+      const d = await r.json();
+      if (r.ok) {
+        const row = document.getElementById('user-row-' + id);
+        if (row) {
+          const statusCell = row.cells[5];
+          const actionCell = row.cells[6];
+          statusCell.innerHTML = '<span class="tag status-denied">denied</span>';
+          actionCell.innerHTML = `<button class="admin-btn admin-btn-approve" onclick="approveUser(${id})">✓ Reinstate</button>`;
+        }
+        showAlert('🚫 User denied.');
+      } else { showAlert('Error: ' + d.error, true); }
+    }
+
+    async function verifySacco(id) {
+      const r = await fetch(`/api/admin/sacco/${id}/verify`, { method: 'POST', headers: adminHeaders() });
+      const d = await r.json();
+      if (r.ok) {
+        // Remove from pending table
+        const pendingRow = document.getElementById('sacco-row-' + id);
+        if (pendingRow) {
+          // Extract data from the pending row cells to rebuild in verified table
+          const cells     = pendingRow.cells;
+          const dateText  = cells[0].textContent;
+          const nameText  = cells[1].querySelector('strong').textContent;
+          const tierHtml  = cells[2].innerHTML;
+          const amtText   = cells[3].querySelector('strong').textContent; // "UGX X,XXX"
+          const txHtml    = cells[4].innerHTML;
+          const noteHtml  = cells[5].innerHTML;
+          const amount    = parseInt(amtText.replace(/[^\d]/g,'')) || 0;
+
+          pendingRow.remove();
+
+          // Append to verified table (remove "no data" placeholder if present)
+          const verifiedBody = document.getElementById('table-sacco-verified');
+          const placeholder  = verifiedBody.querySelector('td[colspan="7"]');
+          if (placeholder) placeholder.closest('tr').remove();
+
+          // Remove old totals row if exists
+          const oldTotal = verifiedBody.querySelector('tr[data-total-row]');
+          if (oldTotal) oldTotal.remove();
+
+          const rowNum = verifiedBody.rows.length + 1;
+          const newRow = document.createElement('tr');
+          newRow.id = 'sacco-verified-row-' + id;
+          newRow.innerHTML = `
+            <td style="color:var(--muted);font-size:12px;">${dateText}</td>
+            <td><strong>${nameText}</strong><span style="font-size:11px;color:var(--muted);margin-left:4px;">#${rowNum}</span></td>
+            <td>${tierHtml}</td>
+            <td><strong style="color:#0f766e;">${amtText}</strong></td>
+            <td>${txHtml}</td>
+            <td>${noteHtml}</td>
+            <td><button class="admin-btn admin-btn-reject" onclick="revokeVerified(${id})" title="Revoke">✗ Revoke</button></td>
+          `;
+          verifiedBody.appendChild(newRow);
+
+          // Recalculate running total from all verified rows
+          let runningTotal = 0;
+          Array.from(verifiedBody.rows).forEach(row => {
+            if (row.dataset.totalRow) return;
+            const strong = row.cells[3]?.querySelector('strong');
+            if (strong) runningTotal += parseInt(strong.textContent.replace(/[^\d]/g,'')) || 0;
+          });
+
+          // Add/update totals row
+          const tfr = document.createElement('tr');
+          tfr.dataset.totalRow = '1';
+          tfr.style.cssText = 'background:#f0fdf9;font-weight:700;';
+          tfr.innerHTML = `
+            <td colspan="3" style="text-align:right;color:#0f766e;padding:12px;">TOTAL VERIFIED FUND</td>
+            <td style="color:#0f766e;font-size:16px;">UGX ${runningTotal.toLocaleString()}</td>
+            <td colspan="3"></td>
+          `;
+          verifiedBody.appendChild(tfr);
+
+          // Update metric card
+          document.getElementById('metric-sacco').textContent = 'UGX ' + runningTotal.toLocaleString();
+        }
+
+        showAlert('✅ SACCO contribution verified and moved to Verified Members list.');
+      } else { showAlert('Error: ' + d.error, true); }
+    }
+
+    async function rejectSacco(id) {
+      const r = await fetch(`/api/admin/sacco/${id}/reject`, { method: 'POST', headers: adminHeaders() });
+      const d = await r.json();
+      if (r.ok) {
+        document.getElementById('sacco-row-' + id)?.remove();
+        showAlert('🚫 SACCO contribution rejected.');
+      } else { showAlert('Error: ' + d.error, true); }
+    }
+
+    async function revokeVerified(id) {
+      if (!confirm('Are you sure you want to revoke this verified contribution? It will be removed from the verified list.')) return;
+      const r = await fetch(`/api/admin/sacco/${id}/reject`, { method: 'POST', headers: adminHeaders() });
+      const d = await r.json();
+      if (r.ok) {
+        document.getElementById('sacco-verified-row-' + id)?.remove();
+        // Update sacco total metric
+        const currentTotal = parseInt(document.getElementById('metric-sacco').textContent.replace(/[^\d]/g,'')) || 0;
+        showAlert('🚫 Contribution revoked and removed from verified list.');
+      } else { showAlert('Error: ' + d.error, true); }
+    }
+
+    
+    async function deleteWithdrawal(id) {
+      if (!confirm('Delete this withdrawal record?')) return;
+      const r = await fetch((window.API_BASE_URL || '') + '/api/admin/withdraw/' + id, { method: 'DELETE', headers: adminHeaders() });
+      const d = await r.json();
+      if (r.ok) {
+        document.getElementById('wd-row-' + id)?.remove();
+        showAlert('Withdrawal record deleted.');
+      } else { showAlert('Error: ' + d.error, true); }
+    }
+
+    async function verifyDonation(id) {
+      const r = await fetch(`/api/admin/donations/${id}/verify`, { method: 'POST', headers: adminHeaders() });
+      const d = await r.json();
+      if (r.ok) {
+        document.getElementById('don-row-' + id)?.remove();
+        showAlert('✅ Donation verified successfully. Please refresh the page to see it under Verified Donations and updated metrics.');
+      } else { showAlert('Error: ' + d.error, true); }
+    }
+
+    async function rejectDonation(id) {
+      const r = await fetch(`/api/admin/donations/${id}/reject`, { method: 'POST', headers: adminHeaders() });
+      const d = await r.json();
+      if (r.ok) {
+        document.getElementById('don-row-' + id)?.remove();
+        showAlert('🚫 Donation rejected.');
+      } else { showAlert('Error: ' + d.error, true); }
+    }
+
+    async function revokeDonation(id) {
+      if (!confirm('Are you sure you want to revoke and delete this donation record?')) return;
+      const r = await fetch(`/api/admin/donations/${id}/reject`, { method: 'POST', headers: adminHeaders() });
+      const d = await r.json();
+      if (r.ok) {
+        document.getElementById('don-verified-row-' + id)?.remove();
+        showAlert('🚫 Donation revoked.');
+      } else { showAlert('Error: ' + d.error, true); }
+    }
+
+    // Withdraw form submit
+    document.addEventListener('DOMContentLoaded', () => {
+      const wdBtn = document.getElementById('wd-submit-btn');
+      if (!wdBtn) return;
+      wdBtn.addEventListener('click', async () => {
+        const amount     = document.getElementById('wd-amount').value;
+        const reason     = document.getElementById('wd-reason').value;
+        const method     = document.getElementById('wd-method').value;
+        const accountRef = document.getElementById('wd-account').value;
+        const errEl      = document.getElementById('wd-error');
+        errEl.style.display = 'none';
+
+        if (!amount || !reason || !method || !accountRef) {
+          errEl.textContent = 'Please fill in all fields.'; errEl.style.display = 'block'; return;
+        }
+
+        wdBtn.disabled = true; wdBtn.textContent = 'Processing...';
+        try {
+          const r = await fetch((window.API_BASE_URL || '') + '/api/admin/withdraw', {
+            method: 'POST',
+            headers: { ...adminHeaders(), 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: Number(amount), reason, method, account_ref: accountRef })
+          });
+          const d = await r.json();
+          if (!r.ok) {
+            errEl.textContent = d.error; errEl.style.display = 'block';
+          } else {
+            // Add row to table
+            const wdBody = document.getElementById('table-withdrawals');
+            const placeholder = wdBody.querySelector('td[colspan="7"]');
+            if (placeholder) placeholder.closest('tr').remove();
+
+            const oldTotal = wdBody.querySelector('tr[data-wd-total]');
+            if (oldTotal) oldTotal.remove();
+
+            const tr = document.createElement('tr');
+            tr.id = 'wd-row-' + d.id;
+            tr.innerHTML = `
+              <td style="color:var(--muted);font-size:12px;">${new Date().toLocaleString()}</td>
+              <td><strong style="color:#dc2626;">UGX ${Number(amount).toLocaleString()}</strong></td>
+              <td>${reason}</td>
+              <td>${method}</td>
+              <td><code style="font-size:11px;">${accountRef}</code></td>
+              <td style="font-size:12px;color:var(--muted);">Admin</td>
+              <td><button class="admin-btn admin-btn-reject" onclick="deleteWithdrawal(${d.id})">&#x1F5D1; Delete</button></td>
+            `;
+            wdBody.insertBefore(tr, wdBody.firstChild);
+
+            // Update metrics
+            document.getElementById('metric-withdrawn').textContent = 'UGX ' + (Number(document.getElementById('metric-withdrawn').textContent.replace(/[^\d]/g,'')) + Number(amount)).toLocaleString();
+            document.getElementById('metric-net-balance').textContent = 'UGX ' + Number(d.newBalance).toLocaleString();
+            document.getElementById('wd-balance-display').textContent = 'Available balance: UGX ' + Number(d.newBalance).toLocaleString();
+
+            // Clear form
+            document.getElementById('wd-amount').value = '';
+            document.getElementById('wd-reason').value = '';
+            document.getElementById('wd-method').value = '';
+            document.getElementById('wd-account').value = '';
+            showAlert('✅ Withdrawal of UGX ' + Number(amount).toLocaleString() + ' recorded successfully!');
+          }
+        } catch(e) {
+          errEl.textContent = 'Server error. Is the server running?'; errEl.style.display = 'block';
+        } finally {
+          wdBtn.disabled = false; wdBtn.innerHTML = '&#x1F4E4; Process Withdrawal';
+        }
+      });
+    });
+
+    function showAlert(msg, isError = false) {
+      let bar = document.getElementById('admin-alert-bar');
+      if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'admin-alert-bar';
+        bar.style.cssText = 'position:fixed;top:80px;right:24px;z-index:999;padding:12px 20px;border-radius:10px;font-weight:600;font-size:14px;box-shadow:0 4px 16px rgba(0,0,0,0.15);transition:opacity 0.3s;';
+        document.body.appendChild(bar);
+      }
+      bar.textContent = msg;
+      bar.style.background = isError ? '#fee2e2' : '#dcfce7';
+      bar.style.color = isError ? '#dc2626' : '#15803d';
+      bar.style.opacity = '1';
+      clearTimeout(bar._timer);
+      bar._timer = setTimeout(() => { bar.style.opacity = '0'; }, 3000);
+    }
+  </script>
+</body>
+</html>

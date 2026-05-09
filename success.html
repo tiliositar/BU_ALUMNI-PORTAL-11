@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bugema University Alumni | Submission Success</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .success-icon {
+        width: 72px;
+        height: 72px;
+        background: linear-gradient(135deg, #0f766e, #0d9488);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        box-shadow: 0 8px 24px rgba(15, 118, 110, 0.3);
+        animation: popIn 0.5s ease;
+      }
+      .success-icon svg {
+        width: 36px;
+        height: 36px;
+        stroke: #fff;
+        stroke-width: 3;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      @keyframes popIn {
+        0%   { transform: scale(0); opacity: 0; }
+        70%  { transform: scale(1.1); }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      .success-panel {
+        max-width: 640px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .success-panel .page-title { color: #0f766e; margin-bottom: 6px; }
+      .submission-meta {
+        display: inline-flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+        background: #f0fdf9;
+        border: 1px solid #ccfbef;
+        border-radius: 10px;
+        padding: 10px 18px;
+        margin: 14px 0;
+        font-size: 13px;
+        color: #0b5f58;
+      }
+      .submission-meta span { display: flex; align-items: center; gap: 6px; }
+      .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 18px;
+        text-align: left;
+        font-size: 14px;
+      }
+      .summary-table th {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 9px 14px;
+        font-weight: 600;
+        border-bottom: 2px solid #e2e8f0;
+      }
+      .summary-table td {
+        padding: 9px 14px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+      }
+      .summary-table tr:last-child td { border-bottom: none; }
+      .summary-table tr:nth-child(even) td { background: #f8fafc; }
+      .summary-heading {
+        text-align: left;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+        margin: 20px 0 6px;
+      }
+      .cta-row a { text-decoration: none; }
+
+      /* ── Feedback Section ── */
+      .feedback-section {
+        margin-top: 32px;
+        border-top: 1px solid var(--line);
+        padding-top: 24px;
+        text-align: center;
+      }
+      .feedback-section h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--ink);
+        margin: 0 0 4px;
+      }
+      .feedback-section .fb-sub {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0 0 16px;
+      }
+      /* Stars — row-reverse so star-5 is leftmost visually */
+      .star-rating {
+        display: flex;
+        justify-content: center;
+        flex-direction: row-reverse;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+      .star-rating input[type="radio"] { display: none; }
+      .star-rating label {
+        font-size: 40px;
+        color: #d1d5db;
+        cursor: pointer;
+        transition: color 0.15s, transform 0.15s;
+        line-height: 1;
+      }
+      .star-rating label:hover,
+      .star-rating label:hover ~ label,
+      .star-rating input[type="radio"]:checked ~ label {
+        color: #f59e0b;
+        transform: scale(1.15);
+      }
+      .rating-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #f59e0b;
+        min-height: 22px;
+        margin-bottom: 14px;
+      }
+      .feedback-comment {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font: inherit;
+        font-size: 14px;
+        resize: vertical;
+        min-height: 80px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-sizing: border-box;
+      }
+      .feedback-comment:focus {
+        outline: none;
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px rgba(15,118,110,0.12);
+      }
+      .feedback-submit {
+        margin-top: 12px;
+        border: 1px solid var(--brand);
+        color: #fff;
+        background: var(--brand);
+        border-radius: 8px;
+        padding: 10px 24px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s, border-color 0.2s;
+      }
+      .feedback-submit:hover { background: var(--brand-2); border-color: var(--brand-2); }
+      .feedback-submit:disabled { background: #94a3b8; border-color: #94a3b8; cursor: default; }
+      .feedback-thanks {
+        display: none;
+        background: #f0fdf9;
+        border: 1px solid #ccfbef;
+        border-radius: 10px;
+        padding: 14px 18px;
+        color: #0b5f58;
+        font-weight: 600;
+        font-size: 14px;
+        margin-top: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-wrap">
+        <div class="brand">Bugema University Alumni</div>
+        <button class="mobile-menu-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="about.html">About Us</a>
+          <a href="activities.html">Activities</a>
+          <a href="events-news.html">Events/News</a>
+          <a href="opportunities.html">Opportunities</a>
+          <a href="sacco.html">SACCO</a>
+          <a href="chat.html">Chat</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card success-panel fade-in is-visible">
+
+        <!-- Success Icon -->
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span class="label">Submission Status</span>
+        <h1 class="page-title">Submitted Successfully!</h1>
+        <p class="page-subtitle">
+          Thank you! Your submission has been received by the Bugema University Alumni office. We will get back to you shortly.
+        </p>
+
+        <!-- Submission Meta -->
+        <div class="submission-meta" id="submission-meta">
+          <span>Loading...</span>
+        </div>
+
+        <!-- Submission Summary Table -->
+        <div id="submission-summary"></div>
+
+        <!-- Navigation Buttons -->
+        <div class="cta-row" style="justify-content: center; margin-top: 24px;">
+          <a class="btn-wire" href="activities.html">Back to Activities</a>
+          <a class="btn-wire" href="opportunities.html">Back to Opportunities</a>
+          <a class="btn-wire" href="index.html">Go to Home</a>
+        </div>
+
+        <!-- ── Feedback Section ── -->
+        <div class="feedback-section">
+          <h3>⭐ Rate Your Experience</h3>
+          <p class="fb-sub">How would you rate our website and application process? Your review will appear publicly on our home page.</p>
+
+          <!-- Reviewer name -->
+          <input
+            type="text"
+            id="reviewer-name"
+            placeholder="Your name (optional, e.g. John A.)"
+            style="width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;margin-bottom:12px;box-sizing:border-box;"
+          />
+
+          <!-- 5-Star Rating -->
+          <div class="star-rating" id="star-rating-group">
+            <input type="radio" id="star5" name="rating" value="5" />
+            <label for="star5" title="Excellent">&#9733;</label>
+            <input type="radio" id="star4" name="rating" value="4" />
+            <label for="star4" title="Good">&#9733;</label>
+            <input type="radio" id="star3" name="rating" value="3" />
+            <label for="star3" title="Average">&#9733;</label>
+            <input type="radio" id="star2" name="rating" value="2" />
+            <label for="star2" title="Poor">&#9733;</label>
+            <input type="radio" id="star1" name="rating" value="1" />
+            <label for="star1" title="Terrible">&#9733;</label>
+          </div>
+          <div class="rating-label" id="rating-label">&nbsp;</div>
+
+          <!-- Comment Box -->
+          <textarea
+            class="feedback-comment"
+            id="feedback-comment"
+            placeholder="Tell us what you liked or how we can improve — your comment will be shown publicly on the home page..."
+          ></textarea>
+          <br />
+          <button class="feedback-submit" id="feedback-submit-btn" type="button">Submit Review</button>
+          <div class="feedback-thanks" id="feedback-thanks">
+            &#10084; Thank you for your review! It will now appear on our home page for others to see.
+            <br/><a href="index.html" style="color:var(--brand);font-weight:700;display:inline-block;margin-top:8px;">See it on the Home Page →</a>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-col">
+          <h4>Bugema University</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="https://www.bugemauniv.ac.ug/index.php/contact-us" target="_blank" rel="noopener">Contact</a></li>
+            <li><a href="activities.html">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="resources.html#faq">FAQ</a></li>
+            <li><a href="resources.html#privacy">Privacy Policy</a></li>
+            <li><a href="resources.html#terms">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#" class="js-open-newsletter">Newsletter</a></li>
+            <li><a href="https://www.facebook.com/BugemaUniversity" target="_blank" rel="noopener">Social Media</a></li>
+            <li><a href="#" class="js-open-feedback">Feedback</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <div class="footer-contact-item">
+            <a href="mailto:alumni@bugemauniversity.ac.ug">alumni@bugemauniversity.ac.ug</a>
+            <a href="tel:+256414373500">+256 414 373 500</a>
+            <span>Mukono, Uganda</span>
+          </div>
+        </div>
+      </div>
+      <hr class="footer-divider" />
+      <div class="footer-bottom">
+        &copy; 2026 Bugema University Alumni Association. All rights reserved. | <a href="admin-login.html" style="color: inherit; text-decoration: none; opacity: 0.7;">Admin Login</a>
+      </div>
+    </footer>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="env-config.js"></script>
+  <script src="script.js"></script>
+    <script>
+      (function () {
+        // ── Submission Summary ──
+        var metaEl = document.getElementById("submission-meta");
+        var summaryEl = document.getElementById("submission-summary");
+        var raw = localStorage.getItem("buLastSubmission");
+
+        if (!raw) {
+          metaEl.innerHTML = "<span>No recent submission was found.</span>";
+        } else {
+          var payload = JSON.parse(raw);
+          metaEl.innerHTML =
+            "<span><strong>" + payload.type + "</strong></span>" +
+            "<span>" + payload.submittedAt + "</span>";
+
+          var heading = document.createElement("p");
+          heading.className = "summary-heading";
+          heading.textContent = "Submission Summary";
+          summaryEl.appendChild(heading);
+
+          var table = document.createElement("table");
+          table.className = "summary-table";
+          var thead = document.createElement("thead");
+          thead.innerHTML = "<tr><th>Field</th><th>Your Response</th></tr>";
+          table.appendChild(thead);
+
+          var tbody = document.createElement("tbody");
+          payload.entries.forEach(function (entry) {
+            var tr = document.createElement("tr");
+            var tdKey = document.createElement("td");
+            var tdVal = document.createElement("td");
+            tdKey.innerHTML = "<strong>" + entry.key + "</strong>";
+            tdVal.textContent = entry.value || "";
+            if (!entry.value) tdVal.innerHTML = "<em style='color:#94a3b8'>Not provided</em>";
+            tr.appendChild(tdKey);
+            tr.appendChild(tdVal);
+            tbody.appendChild(tr);
+          });
+          table.appendChild(tbody);
+          
+          var tableWrapper = document.createElement("div");
+          tableWrapper.className = "table-responsive";
+          tableWrapper.appendChild(table);
+          summaryEl.appendChild(tableWrapper);
+        }
+
+        // ── Star Rating Labels ──
+        var ratingLabels = { "1": "Terrible", "2": "Poor", "3": "Average", "4": "Good", "5": "Excellent" };
+        var stars = document.querySelectorAll("#star-rating-group input[name='rating']");
+        var ratingLabelEl = document.getElementById("rating-label");
+        stars.forEach(function (star) {
+          star.addEventListener("change", function () {
+            ratingLabelEl.textContent = ratingLabels[this.value] + "  (" + this.value + " / 5 stars)";
+          });
+        });
+
+        // ── Feedback Submit → POST to server ──
+        document.getElementById("feedback-submit-btn").addEventListener("click", function () {
+          var selected = document.querySelector("#star-rating-group input[name='rating']:checked");
+          if (!selected) {
+            alert("Please select a star rating before submitting your review.");
+            return;
+          }
+          var comment  = document.getElementById("feedback-comment").value.trim();
+          var reviewer = document.getElementById("reviewer-name").value.trim();
+          var btn = this;
+
+          var feedback = {
+            rating: parseInt(selected.value),
+            label: ratingLabels[selected.value],
+            comment: comment,
+            reviewer_name: reviewer || 'Anonymous'
+          };
+
+          btn.disabled = true;
+          btn.textContent = "Submitting...";
+
+          fetch((window.API_BASE_URL || '') + '/api/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(feedback)
+          })
+          .then(function(r) { return r.json(); })
+          .then(function() {
+            // Also save locally for the modal feedback system
+            feedback.submittedAt = new Date().toLocaleString();
+            localStorage.setItem("buLastFeedback", JSON.stringify(feedback));
+            document.getElementById("feedback-thanks").style.display = "block";
+            btn.textContent = "Review Submitted ✓";
+          })
+          .catch(function() {
+            // Fallback: save locally if server not available
+            feedback.submittedAt = new Date().toLocaleString();
+            localStorage.setItem("buLastFeedback", JSON.stringify(feedback));
+            document.getElementById("feedback-thanks").style.display = "block";
+            btn.textContent = "Review Submitted ✓";
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

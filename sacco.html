@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BU Alumni SACCO | Bugema University</title>
+  <meta name="description" content="Bugema University Alumni SACCO — contribute to the growth fund and invest in Bugema University's future." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-wrap">
+      <div class="brand">
+        <img src="pics/BU%20logo.jpeg" alt="BU Logo" class="brand-logo" />
+        <div class="brand-text">
+          <span class="brand-name">Bugema University</span>
+          <span class="brand-tagline">Excellence In Service</span>
+        </div>
+      </div>
+      <button class="mobile-menu-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="activities.html">Activities</a>
+        <a href="events-news.html">Events/News</a>
+        <a href="opportunities.html">Opportunities</a>
+        <a href="sacco.html" class="active">SACCO</a>
+        <a href="chat.html">Chat</a>
+      </nav>
+      <div id="home-auth-nav" class="home-auth-nav"></div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="sacco-hero">
+    <span class="sacco-hero-badge">🏦 BU Alumni SACCO</span>
+    <h1>Invest in Bugema's Future</h1>
+    <p>
+      The Bugema University Alumni Savings and Credit Cooperative Organisation (SACCO) is a member-driven fund
+      dedicated to supporting university growth, student scholarships, and campus infrastructure.
+    </p>
+    <div class="sacco-stats-strip">
+      <div class="sacco-stat">
+        <div class="sacco-stat-val" id="stat-sacco-total">UGX 0</div>
+        <div class="sacco-stat-label">Total Contributions</div>
+      </div>
+      <div class="sacco-stat">
+        <div class="sacco-stat-val" id="stat-sacco-count">0</div>
+        <div class="sacco-stat-label">Contributors</div>
+      </div>
+      <div class="sacco-stat">
+        <div class="sacco-stat-val">UGX 50M</div>
+        <div class="sacco-stat-label">2026 Growth Target</div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+
+    <div class="sacco-grid">
+
+      <!-- Contribution Form -->
+      <div class="sacco-panel" id="contribute-panel">
+        <h2>📥 Make a Contribution</h2>
+        <p class="panel-sub" id="contribute-sub">Log in as an alumni member to contribute to the SACCO.</p>
+
+        <div id="sacco-login-prompt" style="text-align:center;padding:24px 0;">
+          <p style="color:var(--muted);margin-bottom:16px;">You must be a logged-in, approved alumni member to contribute.</p>
+          <button class="sacco-submit" style="max-width:200px;margin:0 auto;" onclick="openAuthModal('login')">Sign In</button>
+        </div>
+
+        <form class="sacco-form" id="sacco-form" style="display:none;" onsubmit="submitSaccoContribution(event)">
+          <div id="sacco-user-info" style="background:#f0fdf9;border:1px solid #ccfbef;border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:14px;color:#0b5f58;font-weight:600;"></div>
+
+          <label style="font-size:13px;color:var(--muted);margin-bottom:4px;display:block;">Contribution Amount (UGX)*</label>
+          <input type="number" id="sacco-amount" placeholder="e.g. 50000" min="10000" required />
+
+          <div class="sacco-pay-note" id="sacco-pay-note" style="display:none;">
+            📲 Send <strong id="sacco-pay-amt"></strong> UGX via <strong>Mobile Money</strong> to:<br/>
+            <span style="font-size:18px;color:#0f766e;font-weight:800;">0763682699</span> <em style="font-size:12px;">(BU Alumni Admin)</em>
+          </div>
+
+          <label style="font-size:13px;color:var(--muted);margin-bottom:4px;display:block;">Mobile Money Transaction ID*</label>
+          <input type="text" id="sacco-txid" placeholder="e.g. TX1234567890" required />
+
+          <label style="font-size:13px;color:var(--muted);margin-bottom:4px;display:block;">Purpose / Note (optional)</label>
+          <textarea id="sacco-note" placeholder="e.g. Monthly contribution — May 2026" rows="2"></textarea>
+
+          <button type="submit" class="sacco-submit" id="sacco-submit-btn">Submit Contribution</button>
+          <div id="sacco-success-msg" style="display:none;margin-top:12px;background:#dcfce7;color:#15803d;border-radius:8px;padding:12px;font-weight:600;text-align:center;">
+            🎉 Contribution submitted! Awaiting admin verification.
+          </div>
+          <div id="sacco-error-msg" style="display:none;margin-top:12px;background:#fee2e2;color:#dc2626;border-radius:8px;padding:12px;font-weight:600;text-align:center;"></div>
+        </form>
+      </div>
+
+      <!-- Public Ledger -->
+      <div class="sacco-panel">
+        <h2>📊 Verified Contributions</h2>
+        <p class="panel-sub">Recent verified contributions by our alumni members.</p>
+        <div style="overflow-x:auto;">
+          <table class="sacco-ledger">
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Tier</th>
+                <th>Amount</th>
+                <th>Note</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="sacco-ledger-body">
+              <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">Loading contributions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SACCO Rules -->
+    <div class="sacco-rules">
+      <h2>📋 SACCO Membership Rules &amp; Benefits</h2>
+      <p>All registered alumni in good standing are eligible to participate in the BU Alumni SACCO.</p>
+      <div class="sacco-rules-grid">
+        <div class="sacco-rule-card">
+          <h4>🥉 Ordinary Members</h4>
+          <p>Minimum registration fee: <strong>50,000 UGX</strong>. Monthly contribution: <strong>10,000 UGX</strong>. Eligible for small facility loans and alumni network benefits.</p>
+        </div>
+        <div class="sacco-rule-card">
+          <h4>🥈 Silver Members</h4>
+          <p>Registration fee: <strong>200,000 UGX</strong>. Monthly contribution: <strong>30,000 UGX</strong>. Priority access to scholarship nominations and enhanced loan limits.</p>
+        </div>
+        <div class="sacco-rule-card">
+          <h4>🏆 Gold Members</h4>
+          <p>Registration fee: <strong>500,000 UGX</strong>. Monthly contribution: <strong>50,000 UGX</strong>. Seat on the advisory council, investment dividends, and naming rights on university facilities.</p>
+        </div>
+        <div class="sacco-rule-card">
+          <h4>🎓 How Funds Are Used</h4>
+          <p>Contributions go toward student scholarships, campus infrastructure upgrades, faculty development, and community outreach programs.</p>
+        </div>
+        <div class="sacco-rule-card">
+          <h4>📅 Contribution Cycles</h4>
+          <p>Members contribute monthly or quarterly. All contributions are verified by the alumni admin team within 48 hours of submission.</p>
+        </div>
+        <div class="sacco-rule-card">
+          <h4>📞 Need Help?</h4>
+          <p>Contact us at <strong>alumni@bugemauniversity.ac.ug</strong> or WhatsApp <strong>+256 763 682 699</strong> for any SACCO-related queries.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      &copy; 2026 Bugema University Alumni Association. All rights reserved. | <a href="admin-login.html" style="color: inherit; text-decoration: none; opacity: 0.7;">Admin Login</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="env-config.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = Auth.get();
+
+      // Update auth nav
+      const authNav = document.getElementById('home-auth-nav');
+      if (authNav) {
+        if (!user) {
+          authNav.innerHTML = `<button class="nav-signin-btn" onclick="openAuthModal('login')">Sign In / Register</button>`;
+        } else {
+          const badge = user.role === 'alumni' ? membershipBadge(user.membership_tier) : '';
+          authNav.innerHTML = `
+            <div class="nav-user-chip">
+              <div class="nav-avatar">${user.name[0].toUpperCase()}</div>
+              ${user.name}${badge}
+              <button onclick="Auth.clear();location.reload();" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:12px;font-weight:700;">Sign Out</button>
+            </div>`;
+        }
+      }
+
+      // Show or hide the form
+      const loginPrompt = document.getElementById('sacco-login-prompt');
+      const saccoForm   = document.getElementById('sacco-form');
+      const subText     = document.getElementById('contribute-sub');
+
+      if (user && user.role === 'alumni' && user.status === 'approved') {
+        loginPrompt.style.display = 'none';
+        saccoForm.style.display = 'block';
+        const tierBadge = membershipBadge(user.membership_tier);
+        document.getElementById('sacco-user-info').innerHTML =
+          `👤 Contributing as <strong>${user.name}</strong> ${tierBadge}`;
+        subText.textContent = 'Send payment to 0763682699 and enter your Transaction ID below.';
+      } else if (user && user.status === 'pending') {
+        loginPrompt.innerHTML = `<p style="color:#d97706;font-weight:600;">⏳ Your account is pending admin approval. You will be able to contribute once approved.</p>`;
+      } else if (user && user.role !== 'alumni') {
+        loginPrompt.innerHTML = `<p style="color:var(--muted);">Only alumni members can contribute to the SACCO.</p>`;
+      }
+
+      // Amount → show payment note
+      document.getElementById('sacco-amount')?.addEventListener('input', (e) => {
+        const amt = parseFloat(e.target.value);
+        const note = document.getElementById('sacco-pay-note');
+        const amtEl = document.getElementById('sacco-pay-amt');
+        if (amt >= 10000) {
+          note.style.display = 'block';
+          amtEl.textContent = amt.toLocaleString();
+        } else {
+          note.style.display = 'none';
+        }
+      });
+
+      // Load public ledger
+      loadSaccoLedger();
+    });
+
+    async function loadSaccoLedger() {
+      const tbody = document.getElementById('sacco-ledger-body');
+      try {
+        const res = await fetch((window.API_BASE_URL || '') + '/api/sacco/contributions');
+        const { contributions, stats } = await res.json();
+
+        // update stats
+        document.getElementById('stat-sacco-total').textContent = 'UGX ' + Number(stats.total).toLocaleString();
+        document.getElementById('stat-sacco-count').textContent = stats.count;
+
+        if (!contributions.length) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">No verified contributions yet. Be the first! 🎉</td></tr>';
+          return;
+        }
+        tbody.innerHTML = '';
+        contributions.forEach(c => {
+          const tr = document.createElement('tr');
+          const tierBadge = c.membership_tier
+            ? `<span class="mem-badge mem-badge-${c.membership_tier.toLowerCase()}">${c.membership_tier}</span>`
+            : '—';
+          tr.innerHTML = `
+            <td><strong>${c.user_name}</strong></td>
+            <td>${tierBadge}</td>
+            <td><strong>UGX ${Number(c.amount).toLocaleString()}</strong></td>
+            <td>${c.note || '—'}</td>
+            <td style="color:var(--muted);font-size:12px;">${new Date(c.created_at).toLocaleDateString()}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);">Start the server to see contributions.</td></tr>';
+      }
+    }
+
+    async function submitSaccoContribution(e) {
+      e.preventDefault();
+      const user = Auth.get();
+      if (!user) return;
+
+      const amount = parseFloat(document.getElementById('sacco-amount').value);
+      const tx_id  = document.getElementById('sacco-txid').value.trim();
+      const note   = document.getElementById('sacco-note').value.trim();
+      const btn    = document.getElementById('sacco-submit-btn');
+      const errMsg = document.getElementById('sacco-error-msg');
+      const sucMsg = document.getElementById('sacco-success-msg');
+
+      errMsg.style.display = 'none';
+      sucMsg.style.display = 'none';
+
+      if (amount < 10000) { errMsg.textContent = 'Minimum contribution is UGX 10,000.'; errMsg.style.display = 'block'; return; }
+      if (!tx_id) { errMsg.textContent = 'Please enter your Mobile Money Transaction ID.'; errMsg.style.display = 'block'; return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+
+      try {
+        const res = await fetch((window.API_BASE_URL || '') + '/api/sacco/contribute', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: user.id,
+            user_name: user.name,
+            membership_tier: user.membership_tier,
+            amount, tx_id, note
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          errMsg.textContent = data.error;
+          errMsg.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Submit Contribution';
+        } else {
+          sucMsg.style.display = 'block';
+          document.getElementById('sacco-form').reset();
+          document.getElementById('sacco-pay-note').style.display = 'none';
+          btn.textContent = 'Contribution Submitted ✓';
+        }
+      } catch {
+        errMsg.textContent = 'Could not reach server. Is it running?';
+        errMsg.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Submit Contribution';
+      }
+    }
+  </script>
+</body>
+</html>

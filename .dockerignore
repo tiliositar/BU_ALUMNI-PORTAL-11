@@ -1,0 +1,10 @@
+node_modules
+alumni.db
+alumni.db-journal
+alumni.db-shm
+alumni.db-wal
+.env
+.git
+.gitignore
+Dockerfile
+fly.toml
