@@ -851,17 +851,38 @@ app.post('/api/admin/donations/:id/reject', adminAuth, (req, res) => {
 
 
 // =====================================================================
+//  SEED ADMIN (Ensure admin exists on fresh deployments)
+// =====================================================================
+
+async function seedAdmin() {
+  const email = 'admin@alumnibugemauniv.ac.ug';
+  const name = 'Admin';
+  const password = 'Microsoft@2030'; // Your default admin password
+  
+  const existing = db.prepare("SELECT id FROM users WHERE email = ?").get(email);
+  if (!existing) {
+    console.log('  🏗️  No admin found. Seeding default administrator...');
+    const hash = await bcrypt.hash(password, 10);
+    db.prepare('INSERT INTO users (name, email, password_hash, role, status) VALUES (?, ?, ?, ?, ?)')
+      .run(name, email, hash, 'admin', 'active');
+    console.log('  ✅ Default admin seeded successfully.');
+  }
+}
+
+// =====================================================================
 //  START SERVER
 // =====================================================================
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log('');
-  console.log('  ╔══════════════════════════════════════════════════╗');
-  console.log('  ║   🎓 Bugema University Alumni Portal            ║');
-  console.log(`  ║   🌐 Server running at http://localhost:${PORT}    ║`);
-  console.log('  ║   📡 Socket.IO ready for real-time updates      ║');
-  console.log('  ║   💳 Flutterwave payment integration active     ║');
-  console.log('  ╚══════════════════════════════════════════════════╝');
-  console.log('');
+seedAdmin().then(() => {
+  server.listen(PORT, () => {
+    console.log('');
+    console.log('  ╔══════════════════════════════════════════════════╗');
+    console.log('  ║   🎓 Bugema University Alumni Portal            ║');
+    console.log(`  ║   🌐 Server running at http://localhost:${PORT}    ║`);
+    console.log('  ║   📡 Socket.IO ready for real-time updates      ║');
+    console.log('  ║   💳 Flutterwave payment integration active     ║');
+    console.log('  ╚══════════════════════════════════════════════════╝');
+    console.log('');
+  });
 });
