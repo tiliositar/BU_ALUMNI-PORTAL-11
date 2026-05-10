@@ -120,6 +120,7 @@ async function sendApprovalEmail({ name, email, approved, membership_tier }) {
 }
 
 // ── Middleware ──────────────────────────────────────────────────────
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
