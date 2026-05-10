@@ -582,7 +582,7 @@
     const adminHeaders = () => ({ 'Content-Type': 'application/json', 'user-id': JSON.parse(localStorage.getItem('buUser')||'{}').id });
 
     async function approveUser(id) {
-      const r = await fetch(`/api/admin/users/${id}/approve`, { method: 'POST', headers: adminHeaders() });
+      const r = await fetch((window.API_BASE_URL || '') + `/api/admin/users/${id}/approve`, { method: 'POST', headers: adminHeaders() });
       const d = await r.json();
       if (r.ok) {
         const row = document.getElementById('user-row-' + id);
@@ -598,7 +598,7 @@
     }
 
     async function denyUser(id) {
-      const r = await fetch(`/api/admin/users/${id}/deny`, { method: 'POST', headers: adminHeaders() });
+      const r = await fetch((window.API_BASE_URL || '') + `/api/admin/users/${id}/deny`, { method: 'POST', headers: adminHeaders() });
       const d = await r.json();
       if (r.ok) {
         const row = document.getElementById('user-row-' + id);
@@ -613,7 +613,7 @@
     }
 
     async function verifySacco(id) {
-      const r = await fetch(`/api/admin/sacco/${id}/verify`, { method: 'POST', headers: adminHeaders() });
+      const r = await fetch((window.API_BASE_URL || '') + `/api/admin/sacco/${id}/verify`, { method: 'POST', headers: adminHeaders() });
       const d = await r.json();
       if (r.ok) {
         // Remove from pending table
@@ -682,7 +682,7 @@
     }
 
     async function rejectSacco(id) {
-      const r = await fetch(`/api/admin/sacco/${id}/reject`, { method: 'POST', headers: adminHeaders() });
+      const r = await fetch((window.API_BASE_URL || '') + `/api/admin/sacco/${id}/reject`, { method: 'POST', headers: adminHeaders() });
       const d = await r.json();
       if (r.ok) {
         document.getElementById('sacco-row-' + id)?.remove();
@@ -692,7 +692,7 @@
 
     async function revokeVerified(id) {
       if (!confirm('Are you sure you want to revoke this verified contribution? It will be removed from the verified list.')) return;
-      const r = await fetch(`/api/admin/sacco/${id}/reject`, { method: 'POST', headers: adminHeaders() });
+      const r = await fetch((window.API_BASE_URL || '') + `/api/admin/sacco/${id}/reject`, { method: 'POST', headers: adminHeaders() });
       const d = await r.json();
       if (r.ok) {
         document.getElementById('sacco-verified-row-' + id)?.remove();
@@ -714,7 +714,7 @@
     }
 
     async function verifyDonation(id) {
-      const r = await fetch(`/api/admin/donations/${id}/verify`, { method: 'POST', headers: adminHeaders() });
+      const r = await fetch((window.API_BASE_URL || '') + `/api/admin/donations/${id}/verify`, { method: 'POST', headers: adminHeaders() });
       const d = await r.json();
       if (r.ok) {
         document.getElementById('don-row-' + id)?.remove();
@@ -723,7 +723,7 @@
     }
 
     async function rejectDonation(id) {
-      const r = await fetch(`/api/admin/donations/${id}/reject`, { method: 'POST', headers: adminHeaders() });
+      const r = await fetch((window.API_BASE_URL || '') + `/api/admin/donations/${id}/reject`, { method: 'POST', headers: adminHeaders() });
       const d = await r.json();
       if (r.ok) {
         document.getElementById('don-row-' + id)?.remove();
@@ -733,7 +733,7 @@
 
     async function revokeDonation(id) {
       if (!confirm('Are you sure you want to revoke and delete this donation record?')) return;
-      const r = await fetch(`/api/admin/donations/${id}/reject`, { method: 'POST', headers: adminHeaders() });
+      const r = await fetch((window.API_BASE_URL || '') + `/api/admin/donations/${id}/reject`, { method: 'POST', headers: adminHeaders() });
       const d = await r.json();
       if (r.ok) {
         document.getElementById('don-verified-row-' + id)?.remove();
